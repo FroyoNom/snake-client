@@ -14,17 +14,33 @@ const connect = () => {
   //interpret incoming data as text
   conn.setEncoding("utf8");
 
-  stdin.on("data", data => {
-    conn.write(data);
-  });
-
   conn.on("connect", connect => {
     console.log("Successfully connected to game server!");
     conn.write("Name: SIO");
   });
-  // conn.on("data", () => {
-  //   conn.write("Name: SIO");
-  // });
+
+  stdin.setRawMode(true);
+  stdin.setEncoding("utf8");
+  stdin.resume();
+
+  stdin.on("data", data => {
+    if (data === "w") {
+      conn.write("Move: up");
+    }
+    if (data === "s") {
+      conn.write("Move: down");
+    }
+    if (data === "a") {
+      conn.write("Move: left");
+    }
+    if (data === "d") {
+      conn.write("Move: right");
+    }
+    if (data === "\u0003") {
+      client.end();
+      process.exit();
+    }
+  });
 
   return conn;
 };
