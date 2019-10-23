@@ -18,6 +18,14 @@ const connect = () => {
     conn.write(data);
   });
 
+  conn.on("connect", connect => {
+    console.log("Successfully connected to game server!");
+    conn.write("Name: SIO");
+  });
+  // conn.on("data", () => {
+  //   conn.write("Name: SIO");
+  // });
+
   return conn;
 };
 
