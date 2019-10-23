@@ -16,6 +16,9 @@ const handleUserInput = key => {
   if (key === "d") {
     connection.write("Move: right");
   }
+  if (key === "k") {
+    connection.write("Say: git gud scrub");
+  }
 };
 
 const setupInput = conn => {
