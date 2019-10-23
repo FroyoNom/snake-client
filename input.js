@@ -4,28 +4,28 @@ const handleUserInput = key => {
   if (key === "\u0003") {
     process.exit();
   }
-  if (data === "w") {
+  if (key === "w") {
     connection.write("Move: up");
   }
-  if (data === "s") {
+  if (key === "s") {
     connection.write("Move: down");
   }
-  if (data === "a") {
+  if (key === "a") {
     connection.write("Move: left");
   }
-  if (data === "d") {
+  if (key === "d") {
     connection.write("Move: right");
   }
 };
 
-const setupInput = () => {
+const setupInput = conn => {
   connection = conn;
-  const stdn = process.stdin;
+  const stdin = process.stdin;
   stdin.setRawMode(true);
   stdin.setEncoding("utf8");
   stdin.resume();
-  stdn.on("data", handleUserInput);
-  return stdn;
+  stdin.on("data", handleUserInput);
+  return stdin;
 };
 
 module.exports = { setupInput };
