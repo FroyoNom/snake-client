@@ -19,29 +19,38 @@ const connect = () => {
     conn.write("Name: SIO");
   });
 
-  stdin.setRawMode(true);
-  stdin.setEncoding("utf8");
-  stdin.resume();
+  const setupInput = () => {
+    const stdn = process.stdin;
+    stdin.setRawMode(true);
+    stdin.setEncoding("utf8");
+    stdin.resume();
+    stdin.on("data", setupInput => {
+      if (setupInput === "w") {
+        conn.write("Move: up");
+      }
+      if (setupInput === "s") {
+        conn.write("Move: down");
+      }
+      if (setupInput === "a") {
+        conn.write("Move: left");
+      }
+      if (setupInput === "d") {
+        conn.write("Move: right");
+      }
+    });
+    return stdn;
+  };
 
-  stdin.on("data", data => {
-    if (data === "w") {
-      conn.write("Move: up");
-    }
-    if (data === "s") {
-      conn.write("Move: down");
-    }
-    if (data === "a") {
-      conn.write("Move: left");
-    }
-    if (data === "d") {
-      conn.write("Move: right");
-    }
-    if (data === "\u0003") {
-      client.end();
-      process.exit();
-    }
-  });
+  const handleUserInput = () => {
+    stdin.on("data", handleUserInput => {
+      if (handleUserInput === "\u0003") {
+        process.exit();
+      }
+    });
+  };
 
+  setupInput();
+  handleUserInput();
   return conn;
 };
 
